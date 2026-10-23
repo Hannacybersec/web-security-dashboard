@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Security Dashboard</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #0f172a;
+            color: #e2e8f0;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        h1 {
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            color: #94a3b8;
+            margin-bottom: 30px;
+        }
+
+        .score-card,
+        .card,
+        .check {
+            background: #1e293b;
+            padding: 22px;
+            border-radius: 14px;
+            margin-bottom: 18px;
+        }
+
+        .score {
+            font-size: 48px;
+            font-weight: bold;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+            margin-bottom: 30px;
+        }
+
+        .card h3 {
+            margin-top: 0;
+            color: #94a3b8;
+        }
+
+        .value {
+            font-size: 32px;
+            font-weight: bold;
+        }
+
+        .check {
+            border-left: 4px solid #22c55e;
+        }
+
+        .check.warning {
+            border-left-color: #f59e0b;
+        }
+
+        .status {
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .detail {
+            color: #94a3b8;
+        }
+
+        @media (max-width: 700px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+
+        <h1>🛡️ Web Security Dashboard</h1>
+        <p class="subtitle">
+            Local defensive security monitoring dashboard
+        </p>
+
+        <div class="score-card">
+            <h2>Security Score</h2>
+            <div class="score">
+                {{ data.security_score }}/100
+            </div>
+        </div>
+
+        <div class="grid">
+
+            <div class="card">
+                <h3>Total Security Checks</h3>
+                <div class="value">
+                    {{ data.total_checks }}
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Passed Checks</h3>
+                <div class="value">
+                    {{ data.passed_checks }}
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Warnings</h3>
+                <div class="value">
+                    {{ data.warnings }}
+                </div>
+            </div>
+
+        </div>
+
+        <h2>Security Checks</h2>
+
+        {% for check in data.checks %}
+
+        <div class="check {% if check.status == 'WARNING' %}warning{% endif %}">
+
+            <h3>{{ check.name }}</h3>
+
+            <div class="status">
+                {% if check.status == 'PASS' %}
+                    ✅ PASS
+                {% else %}
+                    ⚠️ WARNING
+                {% endif %}
+            </div>
+
+            <div class="detail">
+                {{ check.detail }}
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+</body>
+</html>
